@@ -31,8 +31,9 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "service-principal" {
-  source  = "app.terraform.io/b24x7/service-principal/azuread"
-  version = "0.0.1-dev"
+  #source  = "app.terraform.io/b24x7/service-principal/azuread"
+  source = "../terraform-azuread-service-principal"
+  #version = "1.0.0"
   count   = length(var.environments)
 
   name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", var.environments[count.index])
@@ -42,8 +43,9 @@ module "service-principal" {
 
 # The Key Vault where we will store all secrets that are outputs from this module
 module "key-vault" {
-  source  = "app.terraform.io/b24x7/key-vault/azurerm"
-  version = "0.0.1-dev"
+  #source              = "app.terraform.io/b24x7/key-vault/azurerm"
+  #version             = "1.0.0"
+  source = "../terraform-azurerm-key-vault"
   count               = length(var.environments)
   name                = format("%s%s%s", "kvtf", "${var.project_name}pipeline-", var.environments[count.index])
   resource_group_name = data.azurerm_resource_group.backend.name
@@ -109,12 +111,4 @@ data "azurerm_storage_account_blob_container_sas" "infrastructure" {
     delete = false
     list   = true
   }
-}
-
-# Store each SAS token in each environments respective Key Vault
-resource "azurerm_key_vault_secret" "sas" {
-  count = length(var.environments)
-  name = format("%s%s", "sc-sas-", var.environments[count.index])
-  value = data.azurerm_storage_account_blob_container_sas.infrastructure[count.index].sas
-  key_vault_id = module.key-vault[count.index].id
 }
