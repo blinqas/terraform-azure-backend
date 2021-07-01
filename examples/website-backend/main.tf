@@ -1,3 +1,7 @@
+terraform {
+  backend "azurerm" {}
+}
+
 provider "azurerm" {
     features {}
 }
@@ -7,5 +11,5 @@ module "azure-backend" {
   #version = "0.0.1-dev"
   backend_resource_group_name = "rg-terraform"
   environments = ["dev", "test", "prod"]
-  project_name = "website"
+  project_name = "kportal"
 }
