@@ -11,16 +11,6 @@ terraform {
   }
 }
 
-# Resources this module will do the following:
-# Create a Resource Group per environment where infrastructure will be deployed to ✅
-# Create a Service Principal per environment (used in pipeline and service connection) ✅
-# Assign each service principal Contributor against its respective resource group ✅
-# Create a Storage Account to hold a Storage Container pr environment
-# Create a Storage Container per environment, for each env's infrastructure state (sc-infrastructure-$env)
-# Store a SAS token for each $envs storage container in the $envs respective key vault
-# Create a Key Vault pr environment (kv-project-pipeline-$env) ✅
-# Assign each service principal an access policy against its respective Key Vault ✅
-
 # Get a reference to the backend resource group
 data "azurerm_resource_group" "backend" {
   name = var.backend_resource_group_name
