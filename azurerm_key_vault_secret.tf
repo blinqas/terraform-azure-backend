@@ -1,75 +1,90 @@
 resource "azurerm_key_vault_secret" "client_secret" {
-  count        = length(module.service-principal)
-  key_vault_id = module.key-vault[count.index].id
+  for_each     = toset(var.environments)
+  key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-client-secret"
-  value        = module.service-principal[count.index].client_secret
+  value        = module.service-principal[each.key].client_secret
   tags = {
-    environment = var.environments[count.index]
+    environment = each.key
   }
 }
 
 resource "azurerm_key_vault_secret" "client_id" {
-  count        = length(module.service-principal)
-  key_vault_id = module.key-vault[count.index].id
+  for_each     = toset(var.environments)
+  key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-client-id"
-  value        = module.service-principal[count.index].client_id
+  value        = module.service-principal[each.key].client_id
   tags = {
-    environment = var.environments[count.index]
+    environment = each.key
   }
 }
 
 resource "azurerm_key_vault_secret" "tenant_id" {
-  count        = length(module.service-principal)
-  key_vault_id = module.key-vault[count.index].id
+  for_each     = toset(var.environments)
+  key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-tenant-id"
-  value        = module.service-principal[count.index].tenant_id
+  value        = module.service-principal[each.key].tenant_id
   tags = {
-    environment = var.environments[count.index]
+    environment = each.key
   }
 }
 
 resource "azurerm_key_vault_secret" "subscription_id" {
-  count        = length(module.service-principal)
-  key_vault_id = module.key-vault[count.index].id
+  for_each     = toset(var.environments)
+  key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-subscription-id"
-  value        = module.service-principal[count.index].subscription_id
+  value        = module.service-principal[each.key].subscription_id
   tags = {
-    environment = var.environments[count.index]
+    environment = each.key
   }
 }
 
 # Store each SAS token in each environments respective Key Vault
 resource "azurerm_key_vault_secret" "sas" {
-  count        = length(var.environments)
-  name         = format("%s%s", "kv-sc-sas-", var.environments[count.index])
-  value        = data.azurerm_storage_account_blob_container_sas.infrastructure[count.index].sas
-  key_vault_id = module.key-vault[count.index].id
+  for_each     = toset(var.environments)
+  name         = "kv-sc-sas"
+  value        = data.azurerm_storage_account_blob_container_sas.infrastructure[each.key].sas
+  key_vault_id = module.key-vault[each.key].id
+  tags = {
+    environment = each.key
+  }
 }
 
 resource "azurerm_key_vault_secret" "arm_rg_name" {
-  count        = length(var.environments)
+  for_each     = toset(var.environments)
   name         = "kv-arm-state-rg-name"
   value        = var.backend_resource_group_name
-  key_vault_id = module.key-vault[count.index].id
+  key_vault_id = module.key-vault[each.key].id
+  tags = {
+    environment = each.key
+  }
 }
 
 resource "azurerm_key_vault_secret" "arm_sa_name" {
-  count        = length(var.environments)
+  for_each     = toset(var.environments)
   name         = "kv-arm-state-sa-name"
   value        = azurerm_storage_account.sa.name
-  key_vault_id = module.key-vault[count.index].id
+  key_vault_id = module.key-vault[each.key].id
+  tags = {
+    environment = each.key
+  }
 }
 
 resource "azurerm_key_vault_secret" "arm_sc_name" {
-  count        = length(var.environments)
+  for_each     = toset(var.environments)
   name         = "kv-arm-state-sc-name"
-  value        = azurerm_storage_container.sc[count.index].name
-  key_vault_id = module.key-vault[count.index].id
+  value        = azurerm_storage_container.sc[each.key].name
+  key_vault_id = module.key-vault[each.key].id
+  tags = {
+    environment = each.key
+  }
 }
 
 resource "azurerm_key_vault_secret" "arm_state_key" {
-  count        = length(var.environments)
+  for_each     = toset(var.environments)
   name         = "kv-arm-state-key"
-  value        = format("%s%s", var.environments[count.index], ".tfstate")
-  key_vault_id = module.key-vault[count.index].id
+  value        = "${each.key}.tfstate"
+  key_vault_id = module.key-vault[each.key].id
+  tags = {
+    environment = each.key
+  }
 }

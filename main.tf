@@ -21,12 +21,12 @@ data "azurerm_client_config" "current" {}
 
 # Create the resource groups where each environment will deploy resources to.
 resource "azurerm_resource_group" "rg" {
-  count = length(var.environments)
+  for_each = toset(var.environments)
 
-  name     = format("%s%s%s", "rg-", "${var.project_name}-", var.environments[count.index])
+  name     = format("%s%s%s", "rg-", "${var.project_name}-", each.key)
   location = var.location
   tags = {
-    environment = "${var.environments[count.index]}"
+    environment = "${each.key}"
   }
 }
 
@@ -34,11 +34,10 @@ module "service-principal" {
   #source  = "app.terraform.io/b24x7/service-principal/azuread"
   source = "../terraform-azuread-service-principal"
   #version = "1.0.0"
-  count   = length(var.environments)
-
-  name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", var.environments[count.index])
+  for_each = toset(var.environments)
+  name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   role   = "Contributor"
-  scopes = [azurerm_resource_group.rg[count.index].id]
+  scopes = [azurerm_resource_group.rg[each.key].id]
 }
 
 # The Key Vault where we will store all secrets that are outputs from this module
@@ -46,14 +45,13 @@ module "key-vault" {
   #source              = "app.terraform.io/b24x7/key-vault/azurerm"
   #version             = "1.0.0"
   source = "../terraform-azurerm-key-vault"
-  count               = length(var.environments)
-  name                = format("%s%s%s", "kvtf", "${var.project_name}pipeline-", var.environments[count.index])
+  for_each = toset(var.environments)
+  name                = format("%s%s%s", "kvtf", "${var.project_name}pipeline-", each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
-
   access_policies = [
     {
-      object_id               = module.service-principal[count.index].object_id
+      object_id               = module.service-principal[each.key].object_id
       secret_permissions      = ["Get", "List"]
       key_permissions         = []
       storage_permissions     = []
@@ -75,7 +73,6 @@ resource "azurerm_storage_account" "sa" {
   name                = format("%s%s%s", "sa", var.project_name, random_integer.sa.result)
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
-
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
@@ -89,20 +86,19 @@ resource "random_integer" "sa" {
 
 # Create the Storage Container that will hold the state for each environment
 resource "azurerm_storage_container" "sc" {
-  count                = length(var.environments)
-  name                 = var.environments[count.index]
+  for_each = toset(var.environments)
+  name                 = each.key
   storage_account_name = azurerm_storage_account.sa.name
 }
 
 # Get a reference to the SAS token for each environment's storage container
 data "azurerm_storage_account_blob_container_sas" "infrastructure" {
-  count             = length(var.environments)
+  for_each = azurerm_storage_container.sc
+  container_name = each.value.name
+  
   connection_string = azurerm_storage_account.sa.primary_connection_string
-
-  container_name = azurerm_storage_container.sc[count.index].name
   start          = "2021-06-30"
   expiry         = "2022-06-30"
-
   permissions {
     read   = true
     add    = true
