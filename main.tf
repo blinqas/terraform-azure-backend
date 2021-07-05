@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "2.65.0"
     }
+    azuredevops = {
+      source = "microsoft/azuredevops"
+      version = "0.1.5"
+    }
   }
 }
 
@@ -18,6 +22,9 @@ data "azurerm_resource_group" "backend" {
 
 # Get a reference to the current Azure RM context to give it access to Key Vaults
 data "azurerm_client_config" "current" {}
+
+# Get a reference to the current subscription context to supply the Az DevOps integration
+data "azurerm_subscription" "current" {}
 
 # Create the resource groups where each environment will deploy resources to.
 resource "azurerm_resource_group" "rg" {

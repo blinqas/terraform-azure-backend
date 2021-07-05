@@ -3,6 +3,8 @@ Terraform Backend module for Azure by blinQ
 
 A Terraform module to provision common backend infrastructure in Azure. This module is meant to be run manually in Terraform CLI with an account that has Owner or roles that has permissions to IAM.
 
+You can optionally have this module create an Azure DevOps project and automatically provision service principals for you. See Usage for how-to.
+
 Diagram
 -------
 ![Diagram of topology](./documentation/diagram.png "Diagram of topology")
@@ -45,6 +47,11 @@ The module expects you to have pre-provisioned the following
 2. A Storage Account - Required for the Storage Container in the next requirement
 3. A Storage Container - This module will store its remote state in this location. (Make sure it is secured!)
 
+If you want this module to create an Azure DevOps project you will need the following
+
+1. An existing Azure DevOps Organization
+2. A PAT with the Scopes: `Project and Team: Read, write & manage`, `Service Connections: Read, query & manage`
+
 Module Input Variables
 ----------------------
 
@@ -52,6 +59,11 @@ Module Input Variables
 - `environments` - a list of the environments you want. Some resources are suffixed with its respective environment name.
 - `backend_resource_group_name` - the name of the resource group you need to have pre-provisioned.
 - `location` - location to provision resources to. Defaults to norwayeast.
+- `enable_azuredevops` - set to true if you want this module to create a Azure DevOps Project in an existing organization
+- `azuredevops` - block supports the following
+  - `project_name` - the name of the Azure DevOps project to create
+  - `project_description` - a description of the project
+  - `visibility` - if the project should be `private` or `public`
 
 Usage
 -----
@@ -60,10 +72,11 @@ Usage
 2. Copy the usage example below to `project/terraform/backend/main.tf` and modify to your needs
 3. Authenticate to az `az login`
 4. Copy `project/terraform/backend/backend.conf.example` to `project/terraform/backend/backend.conf` and edit the values to match your environment
-5. Run `terraform init -backend-config="backend.conf"`
-6. Run `terraform plan -out backend.tfplan`
-7. Verify the plan
-8. Run `terraform apply "backend.tfplan"`
+5. Copy `project/terraform/backend/azuredevops.conf.example` to `project/terraform/backend/azuredevops.conf` and edit the values to match your Azure DevOps organization. Copy and paste the contents of the file into your PowerShell terminal where you run Terraform.
+6. Run `terraform init -backend-config="backend.conf"`
+7. Run `terraform plan -out backend.tfplan`
+8. Verify the plan
+9. Run `terraform apply "backend.tfplan"`
 
 ```hcl
 module "terraform-backend" {
@@ -73,6 +86,12 @@ module "terraform-backend" {
   environments                = ["dev", "test", "prod"]
   backend_resource_group_name = "rg-terraform"
   location                    = "norwayeast"
+  enable_azuredevops          = "true"
+  azuredevops = {
+    project_name = "My Azure DevOps Project"
+    project_description = "Managed by Terraform"
+    visibility = "private"
+  }
 }
 ```
 
