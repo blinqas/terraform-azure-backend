@@ -7,29 +7,29 @@ A Terraform module to provision common backend infrastructure in Azure. This mod
 Deep dive
 ---------
 This module will create the following resources per environment you provide.
-1. A resource group named `rg-project_name-${env}`
-2. A service principal named `sp-tf-project_name-${env}`
-a) This service principal will be assigned the Contributor role to its respective resource group
-3. A key vault named `kvtf${project_name}pipeline-${env}`
-a) This Key Vault will be deployed to the backend resource group. The purpose of this Key Vault is to store the service principal's credentials.
-b) The authenticated user who runs this module will be given ["Set", "Get", "List", "Delete", "Purge", "Recover"] on `Secrets` in this key vault.
-c) Each service principal will be given ["Get", "List"] on `Secrets` in its respective key vault.
-4. A Storage Account named `sa${project_name}${random_integer}` that will hold each environments Storage Container (to store remote state)
-5. A Storage Container named `${env}` that will hold the state for each environment
-6. A Blob Container SAS (Shared Access Signature) per environments respective Storage Container
+* A resource group named `rg-project_name-${env}`
+* A service principal named `sp-tf-project_name-${env}`
+  * This service principal will be assigned the Contributor role to its respective resource group
+* A key vault named `kvtf${project_name}pipeline-${env}`
+  * This Key Vault will be deployed to the backend resource group. The purpose of this Key Vault is to store the service principal's credentials.
+* The authenticated user who runs this module will be given ["Set", "Get", "List", "Delete", "Purge", "Recover"] on `Secrets` in this key vault.
+  *  Each service principal will be given ["Get", "List"] on `Secrets` in its respective key vault.
+* A Storage Account named `sa${project_name}${random_integer}` that will hold each environments Storage Container (to store remote state)
+* A Storage Container named `${env}` that will hold the state for each environment
+* A Blob Container SAS (Shared Access Signature) per environments respective Storage Container
 
 Per environment, the following secrets are stored in its respective Key Vault
-1. SAS to its respective Storage Container
-2. Authentication details to each service principal
-a) client_id
-b) client_secret
-c) tenant_id
-d) subscription_id
-3. Backend configuration needed for Terraform to use Remote State (per environment)
-a) backend_resource_group_name
-b) Storage Account name
-c) Storage Container name
-d) Key name
+* SAS to its respective Storage Container
+* Authentication details to each service principal
+  * client_id
+  * client_secret
+  * tenant_id
+  * subscription_id
+* Backend configuration needed for Terraform to use Remote State (per environment)
+  * backend_resource_group_name
+  * Storage Account name
+  * Storage Container name
+  * Key name
 
 
 Requirements
