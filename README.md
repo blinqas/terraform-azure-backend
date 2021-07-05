@@ -38,7 +38,7 @@ Requirements
 The module expects you to have pre-provisioned the following
 
 1. A Resource Group - This module deploys a single Storage Account and one Storage Container(pr. environment) where remote state for the project infrastructure will reside.
-2. A Storage Account - Required for the Storage Container in Requirement #3
+2. A Storage Account - Required for the Storage Container in the next requirement
 3. A Storage Container - This module will store its remote state in this location. (Make sure it is secured!)
 
 Module Input Variables
