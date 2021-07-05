@@ -31,9 +31,8 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "service-principal" {
-  #source  = "app.terraform.io/b24x7/service-principal/azuread"
-  source = "../terraform-azuread-service-principal"
-  #version = "1.0.0"
+  source  = "app.terraform.io/b24x7/service-principal/azuread"
+  version = "1.0.0"
   for_each = toset(var.environments)
   name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   role   = "Contributor"
@@ -42,9 +41,8 @@ module "service-principal" {
 
 # The Key Vault where we will store all secrets that are outputs from this module
 module "key-vault" {
-  #source              = "app.terraform.io/b24x7/key-vault/azurerm"
-  #version             = "1.0.0"
-  source = "../terraform-azurerm-key-vault"
+  source              = "app.terraform.io/b24x7/key-vault/azurerm"
+  version             = "0.0.1-dev"
   for_each = toset(var.environments)
   name                = format("%s%s%s", "kvtf", "${var.project_name}pipeline-", each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
