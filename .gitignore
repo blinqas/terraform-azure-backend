@@ -2,6 +2,7 @@ dev/
 
 backend.conf
 azurerm.conf
+azuredevops.conf
 
 # Local .terraform directories
 **/.terraform/*
