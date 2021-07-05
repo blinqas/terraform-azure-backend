@@ -86,6 +86,12 @@ module "terraform-backend" {
   environments                = ["dev", "test", "prod"]
   backend_resource_group_name = "rg-terraform"
   location                    = "norwayeast"
+  enable_azuredevops          = "true"
+  azuredevops = {
+    project_name = "My Azure DevOps Project"
+    project_description = "Managed by Terraform"
+    visibility = "private"
+  }
 }
 ```
 
