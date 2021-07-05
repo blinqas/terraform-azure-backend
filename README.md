@@ -3,6 +3,10 @@ Terraform Backend module for Azure by blinQ
 
 A Terraform module to provision common backend infrastructure in Azure. This module is meant to be run manually in Terraform CLI with an account that has Owner or roles that has permissions to IAM.
 
+Diagram
+-------
+![Diagram of topology](./documentation/diagram.png "Diagram of topology")
+
 
 Deep dive
 ---------
