@@ -37,3 +37,17 @@ variable "azuredevops" {
   }
   description = "Configuration for Azure DevOps integration. If provided, a project will be created and all service principals will be connected as service connections."
 }
+
+variable "resource_group_name" {
+  type = string
+  description = "Name of resource group that are created per environment. The current environment name is always appended like -env. Example: rg-example-dev"
+}
+
+variable "project_name_short" {
+  type = string
+  description = "Short name for the project. Is used to name Key Vault. Must be 2 characters."
+  validation {
+    condition = length(var.project_name_short) == 2
+    error_message = "The project_name_short value must be 2 characters."
+  }
+}

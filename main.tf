@@ -30,7 +30,7 @@ data "azurerm_subscription" "current" {}
 resource "azurerm_resource_group" "rg" {
   for_each = toset(var.environments)
 
-  name     = format("%s%s%s", "rg-", "${var.project_name}-", each.key)
+  name     = "${var.resource_group_name}-${each.key}"
   location = var.location
   tags = {
     environment = "${each.key}"
@@ -39,7 +39,7 @@ resource "azurerm_resource_group" "rg" {
 
 module "service-principal" {
   source  = "app.terraform.io/b24x7/service-principal/azuread"
-  version = "1.0.0"
+  version = "1.0.1"
   for_each = toset(var.environments)
   name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   role   = "Contributor"
@@ -50,8 +50,8 @@ module "service-principal" {
 module "key-vault" {
   source              = "app.terraform.io/b24x7/key-vault/azurerm"
   version             = "0.0.1-dev"
-  for_each = toset(var.environments)
-  name                = format("%s%s%s", "kvtf", "${var.project_name}pipeline-", each.key)
+  for_each            = toset(var.environments)
+  name                = format("%s%s%s", "kvtf", "${var.project_name_short}pipeline-", each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
   access_policies = [
