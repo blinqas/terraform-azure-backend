@@ -75,7 +75,7 @@ module "key-vault" {
 # Create the Storage Account that will hold each environments Storage Container, where the state files will
 # be stored
 resource "azurerm_storage_account" "sa" {
-  name                = format("%s%s%s", "satf", var.project_name, random_integer.sa.result)
+  name                = lower(format("%s%s%s", "satf", var.project_name, random_integer.sa.result))
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
   account_tier             = "Standard"
