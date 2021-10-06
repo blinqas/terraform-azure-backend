@@ -49,7 +49,7 @@ module "service-principal" {
 # The Key Vault where we will store all secrets that are outputs from this module
 module "key-vault" {
   source              = "app.terraform.io/b24x7/key-vault/azurerm"
-  version             = "0.0.1-dev"
+  version             = "1.0.1"
   for_each            = toset(var.environments)
   name                = format("%s%s%s", "kvtf", "${var.project_name_short}pipeline-", each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
