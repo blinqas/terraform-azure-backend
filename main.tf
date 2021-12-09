@@ -8,10 +8,6 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "2.65.0"
     }
-    #azuredevops = {
-    #  source = "microsoft/azuredevops"
-    #  version = "0.1.5"
-    #}
   }
 }
 
@@ -39,11 +35,12 @@ resource "azurerm_resource_group" "rg" {
 
 module "service-principal" {
   source  = "app.terraform.io/b24x7/service-principal/azuread"
-  version = "1.0.1"
+  version = "2.0.1"
   for_each = toset(var.environments)
-  name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
+  name   = format("%s%s%s%s", "sp-tf-", "${var.project_name}-", each.key, ".")
   role   = "Contributor"
   scopes = [azurerm_resource_group.rg[each.key].id]
+  identifier_uri_verified_domain = var.identifier_uri_verified_domain
 }
 
 # The Key Vault where we will store all secrets that are outputs from this module
@@ -51,7 +48,7 @@ module "key-vault" {
   source              = "app.terraform.io/b24x7/key-vault/azurerm"
   version             = "1.0.1"
   for_each            = toset(var.environments)
-  name                = format("%s%s%s", "kvtf", "${var.project_name_short}pipeline-", each.key)
+  name                = format("%s-%s-%s", "kv-tf", random_string.backend_id.result, each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
   access_policies = [
@@ -75,18 +72,12 @@ module "key-vault" {
 # Create the Storage Account that will hold each environments Storage Container, where the state files will
 # be stored
 resource "azurerm_storage_account" "sa" {
-  name                = lower(format("%s%s%s", "satf", var.project_name, random_integer.sa.result))
+  name                = lower(format("%s%s%s", "satf", var.project_name, random_string.backend_id.result))
   resource_group_name = data.azurerm_resource_group.backend.name
   location            = data.azurerm_resource_group.backend.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
-}
-
-# Create a random integer that will be used to create a unique  name for the Storage Account
-resource "random_integer" "sa" {
-  min = 1000
-  max = 9000
 }
 
 # Create the Storage Container that will hold the state for each environment

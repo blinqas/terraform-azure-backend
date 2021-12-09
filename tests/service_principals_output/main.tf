@@ -13,20 +13,19 @@ resource "random_string" "project_name" {
 }
 
 locals {
-  environments = ["dev", "feature"]
+  environments = ["stage"]
   project_name = random_string.project_name.result
 }
 
-module "azure-backend" {
+module "backend" {
   source  = "../../"
   backend_resource_group_name = "rg-terraform"
   environments = local.environments
   project_name = local.project_name
-  project_name_short = "kk"
   resource_group_name = "rg-${local.project_name}" # -env is appended automatically
+  identifier_uri_verified_domain = "blinqdev.wwan.no"
 }
 
 output "key_vaults" {
-  value = module.azure-backend.key_vaults
+  value = module.backend.key_vaults
 }
-
