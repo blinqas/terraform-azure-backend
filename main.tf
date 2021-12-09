@@ -35,12 +35,13 @@ resource "azurerm_resource_group" "rg" {
 
 module "service-principal" {
   source  = "app.terraform.io/b24x7/service-principal/azuread"
-  version = "2.0.1"
+  version = "3.0.0"
   for_each = toset(var.environments)
-  name   = format("%s%s%s%s", "sp-tf-", "${var.project_name}-", each.key, ".")
+  name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   role   = "Contributor"
   scopes = [azurerm_resource_group.rg[each.key].id]
   identifier_uri_verified_domain = var.identifier_uri_verified_domain
+  app_name = format("%s-%s", var.project_name, each.key)
 }
 
 # The Key Vault where we will store all secrets that are outputs from this module
