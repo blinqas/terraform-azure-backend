@@ -28,3 +28,9 @@ variable "identifier_uri_verified_domain" {
   type = string
   description = " Change since October 2021 requires a verified domain of the organization or its subdomain. Example: yourdomain.com"
 }
+
+variable "role_assignment" {
+  type = string
+  description = "Specify a built-in Azure AD role which the service principal per environment will be assigned on their respective resource group."
+  default = "Contributor"
+}

@@ -38,7 +38,7 @@ module "service-principal" {
   version = "3.0.0"
   for_each = toset(var.environments)
   name   = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
-  role   = "Contributor"
+  role   = var.role_assignment
   scopes = [azurerm_resource_group.rg[each.key].id]
   identifier_uri_verified_domain = var.identifier_uri_verified_domain
   app_name = format("%s-%s", var.project_name, each.key)
