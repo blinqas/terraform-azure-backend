@@ -2,7 +2,7 @@ resource "azurerm_key_vault_secret" "client_secret" {
   for_each     = toset(var.environments)
   key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-client-secret"
-  value        = module.service-principal[each.key].client_secret
+  value        = module.service-principal[each.key].service_principal_password
   tags = {
     environment = each.key
   }
@@ -12,7 +12,7 @@ resource "azurerm_key_vault_secret" "client_id" {
   for_each     = toset(var.environments)
   key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-client-id"
-  value        = module.service-principal[each.key].client_id
+  value        = module.service-principal[each.key].service_principal.id
   tags = {
     environment = each.key
   }
@@ -22,7 +22,7 @@ resource "azurerm_key_vault_secret" "tenant_id" {
   for_each     = toset(var.environments)
   key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-tenant-id"
-  value        = module.service-principal[each.key].tenant_id
+  value        = data.azurerm_client_config.current.tenant_id
   tags = {
     environment = each.key
   }
@@ -32,7 +32,7 @@ resource "azurerm_key_vault_secret" "subscription_id" {
   for_each     = toset(var.environments)
   key_vault_id = module.key-vault[each.key].id
   name         = "kv-arm-subscription-id"
-  value        = module.service-principal[each.key].subscription_id
+  value        = data.azurerm_subscription.current.subscription_id
   tags = {
     environment = each.key
   }

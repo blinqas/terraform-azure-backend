@@ -11,7 +11,7 @@ output "key_vaults" {
 
 output "backend_id" {
   description = "Unique ID used to name resources in this module"
-  value = random_string.backend_id.result
+  value       = random_string.backend_id.result
 }
 
 output "service_principals" {
