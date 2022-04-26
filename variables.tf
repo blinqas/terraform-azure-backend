@@ -1,15 +1,3 @@
-variable "service_principal_module_source" {
-  type        = string
-  description = "Where to source the service principal module from."
-  default     = "app.terraform.io/b24x7/service-principal/azuread"
-}
-
-variable "service_principal_module_version" {
-  type        = string
-  description = "Which version of the service principal module to source."
-  default     = "3.0.0"
-}
-
 variable "backend_resource_group_name" {
   type        = string
   description = "The name of the resource group that holds the backend resources"
@@ -70,3 +58,4 @@ variable "service_principal_password_rotating_days" {
   description = "Number in days the password for the service principal should rotate. When this number is reached, the password resource is destroyed and recreated. It requires Terraform to be run at all for any change to occur."
   default     = 30
 }
+
