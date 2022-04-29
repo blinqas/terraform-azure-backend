@@ -6,7 +6,7 @@ output "environment_resource_group" {
 # Should produce:
 # { "dev" = { "name" = "x", "id" = "y" } }
 output "key_vaults" {
-  value = module.key-vault[*]
+  value = module.key-vault
 }
 
 output "backend_id" {
@@ -15,5 +15,12 @@ output "backend_id" {
 }
 
 output "service_principals" {
-  value = module.service-principal[*]
+  value = module.service-principal
 }
+
+output "sas" {
+  description = "SAS generated for the storage container which holds Terraform state."
+  value       = data.azurerm_storage_account_blob_container_sas.infrastructure
+  sensitive   = true
+}
+

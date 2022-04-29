@@ -94,8 +94,8 @@ data "azurerm_storage_account_blob_container_sas" "infrastructure" {
   container_name = each.value.name
 
   connection_string = azurerm_storage_account.sa.primary_connection_string
-  start             = "2021-06-30"
-  expiry            = "2022-06-30"
+  start             = local.storage_container_backend_sas_start
+  expiry            = local.storage_container_backend_sas_end
 
   permissions {
     read   = true
