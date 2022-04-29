@@ -3,8 +3,6 @@ output "environment_resource_group" {
   description = "The resource group names of each environment"
 }
 
-# Should produce:
-# { "dev" = { "name" = "x", "id" = "y" } }
 output "key_vaults" {
   value = module.key-vault
 }
