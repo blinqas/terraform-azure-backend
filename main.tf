@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azuread = {
       source  = "hashicorp/azuread"
-      version = "1.6.0"
+      version = "2.21.0"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -34,8 +34,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 module "service-principal" {
-  source                         = "app.terraform.io/b24x7/service-principal/azuread"
-  version                        = "3.0.0"
+  source                         = "../terraform-azuread-service-principal/"
   for_each                       = toset(var.environments)
   name                           = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   role                           = var.role_assignment
