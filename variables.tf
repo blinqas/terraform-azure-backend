@@ -47,3 +47,15 @@ variable "storage_account_blob_container_sas_end_time" {
   default     = "720h"
 }
 
+variable "service_principal_password_rotating_hours" {
+  type        = number
+  description = "Number of hours from execution of this logic until the password resource is recreated. This field make sure the password generated for the service principal rotates. This number must be lower than var.end_date_relative_hours"
+  default     = 144
+}
+
+variable "service_principal_password_end_date_relative_hours" {
+  type        = string
+  description = "A relative duration for which the password is valid until, for example 240h (10 days) or 2400h30m. "
+  default     = "168h"
+}
+

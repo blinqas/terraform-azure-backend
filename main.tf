@@ -41,6 +41,9 @@ module "service-principal" {
   scopes                         = [azurerm_resource_group.rg[each.key].id]
   identifier_uri_verified_domain = var.identifier_uri_verified_domain
   app_name                       = format("%s-%s", var.project_name, each.key)
+  password_rotating_hours        = var.service_principal_password_rotating_hours
+  end_date_relative_hours        = var.service_principal_password_end_date_relative_hours
+
 }
 
 # The Key Vault where we will store all secrets that are outputs from this module
