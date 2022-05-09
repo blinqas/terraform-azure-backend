@@ -6,7 +6,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "2.65.0"
+      version = "3.3.0"
     }
   }
 }
@@ -45,8 +45,7 @@ module "service-principal" {
 
 # The Key Vault where we will store all secrets that are outputs from this module
 module "key-vault" {
-  source              = "app.terraform.io/b24x7/key-vault/azurerm"
-  version             = "1.0.1"
+  source              = "../terraform-azurerm-key-vault/"
   for_each            = toset(var.environments)
   name                = format("%s-%s-%s", "kv-tf", random_string.backend_id.result, each.key)
   resource_group_name = data.azurerm_resource_group.backend.name
