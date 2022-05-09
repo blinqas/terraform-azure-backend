@@ -35,15 +35,15 @@ variable "role_assignment" {
   default     = "Contributor"
 }
 
-variable "azurerm_storage_account_blob_container_sas_start_time" {
+variable "storage_account_blob_container_sas_start_time" {
   type        = string
   description = "Specify the first day the SAS is active. If left empty, start time is automatically calculated from timestamp(), meaning it is updated everytime this module runs."
   default     = ""
 }
 
-variable "azurerm_storage_account_blob_container_sas_end_time" {
+variable "storage_account_blob_container_sas_end_time" {
   type        = string
   description = "Specify the last day the SAS is active."
-  default     = ""
+  default     = "720h"
 }
 
