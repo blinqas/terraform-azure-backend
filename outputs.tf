@@ -14,7 +14,7 @@ output "backend_id" {
   value       = random_string.backend_id.result
 }
 
-output "service_principals" {
-  value = module.service-principal[*]
+output "service_principal" {
+  value = module.service-principal
 }
 
