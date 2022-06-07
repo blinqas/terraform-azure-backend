@@ -35,27 +35,27 @@ variable "role_assignment" {
   default     = "Contributor"
 }
 
-variable "storage_account_blob_container_sas_start_time" {
+variable "azurerm_storage_account_blob_container_sas_start_time" {
   type        = string
-  description = "Specify the first day the SAS is active. If left empty, start time is automatically calculated from timestamp(), meaning it is updated everytime this module runs."
-  default     = ""
+  description = "Specify the first day the SAS is active."
+  default     = "2022-01-01"
 }
 
-variable "storage_account_blob_container_sas_end_time" {
+variable "azurerm_storage_account_blob_container_sas_end_time" {
   type        = string
   description = "Specify the last day the SAS is active."
-  default     = "720h"
-}
-
-variable "service_principal_password_rotating_hours" {
-  type        = number
-  description = "Number of hours from execution of this logic until the password resource is recreated. This field make sure the password generated for the service principal rotates. This number must be lower than var.end_date_relative_hours"
-  default     = 144
+  default     = "2024-12-31"
 }
 
 variable "service_principal_password_end_date_relative_hours" {
   type        = string
-  description = "A relative duration for which the password is valid until, for example 240h (10 days) or 2400h30m. "
-  default     = "168h"
+  description = "Relative day from today that the service principal password expires."
+  default     = "1440h"
+}
+
+variable "service_principal_password_rotating_days" {
+  type        = number
+  description = "Number in days the password for the service principal should rotate. When this number is reached, the password resource is destroyed and recreated. It requires Terraform to be run at all for any change to occur."
+  default     = 30
 }
 

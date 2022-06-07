@@ -3,8 +3,10 @@ output "environment_resource_group" {
   description = "The resource group names of each environment"
 }
 
+# Should produce:
+# { "dev" = { "name" = "x", "id" = "y" } }
 output "key_vaults" {
-  value = module.key-vault
+  value = azurerm_key_vault.backend[*]
 }
 
 output "backend_id" {
@@ -12,13 +14,7 @@ output "backend_id" {
   value       = random_string.backend_id.result
 }
 
-output "service_principals" {
+output "service_principal" {
   value = module.service-principal
-}
-
-output "sas" {
-  description = "SAS generated for the storage container which holds Terraform state."
-  value       = data.azurerm_storage_account_blob_container_sas.infrastructure
-  sensitive   = true
 }
 
