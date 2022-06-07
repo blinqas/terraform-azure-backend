@@ -11,8 +11,8 @@ data "azurerm_storage_account_blob_container_sas" "infrastructure" {
   container_name = each.value.name
 
   connection_string = azurerm_storage_account.sa.primary_connection_string
-  start             = var.azurerm_storage_account_blob_container_sas_start_time
-  expiry            = var.azurerm_storage_account_blob_container_sas_end_time
+  start             = var.storage_account_blob_container_sas_start_time
+  expiry            = var.storage_account_blob_container_sas_end_time
 
   permissions {
     read   = true
