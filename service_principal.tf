@@ -1,6 +1,6 @@
 module "service-principal" {
-  # version                        = var.service_principal_module_version
-  source                         = "../terraform-azuread-service-principal/"
+  source                         = "app.terraform.io/b24x7/service-principal/azuread"
+  version                        = "4.0.0"
   for_each                       = toset(var.environments)
   app_display_name               = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   identifier_uri_verified_domain = var.identifier_uri_verified_domain
