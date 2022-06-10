@@ -37,14 +37,20 @@ variable "role_assignment" {
 
 variable "storage_account_blob_container_sas_start_time" {
   type        = string
-  description = "Specify the first day the SAS is active."
-  default     = "2022-01-01"
+  description = "Specify the first day the SAS is active. Dynamically set to timestamp() if not manually set."
+  default     = ""
 }
 
 variable "storage_account_blob_container_sas_end_time" {
   type        = string
-  description = "Specify the last day the SAS is active."
-  default     = "2024-12-31"
+  description = "Specify the last day the SAS is active. If this variable is left empty, storage_account_blob_container_sas_duration is used instead, which is recommended."
+  default     = ""
+}
+
+variable "storage_account_blob_container_sas_duration" {
+  type        = string
+  description = "String representation of a time difference, consisting of sequences of number and unit pairs, like \"1.5h\" or \"1h30m\". The accepted units are \"ns\", \"us\" (or \"µs\"), \"ms\", \"s\", \"m\", and \"h\". The first number may be negative to indicate a negative duration, like \"-2h5m\". The value entered here represents how long from storage_account_blob_container_sas_start_time the SAS token to the backend storage is valid."
+  default     = "720h"
 }
 
 variable "service_principal_password_end_date_relative_hours" {
