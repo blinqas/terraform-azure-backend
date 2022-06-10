@@ -16,7 +16,7 @@ locals {
 # A major drawback with the module is we cannot automate Application Permissions. Manually assign the service principal delegated permissions: Group.Read.All, User.Read, Application.Read.All
 # 
 module "terraform-backend" {
-  source = "../terraform-azurerm-terraform-backend/"
+  source = "../../../terraform-azurerm-terraform-backend/"
   #version                        = "3.2.0"
   backend_resource_group_name    = "rg-terraform-backend"
   environments                   = local.environments
