@@ -54,3 +54,5 @@ See the example folders for usage.
 License
 =======
 GNU General Public License v3.0 / GNU GPLv3 
+
+Read more here: https://choosealicense.com/licenses/gpl-3.0/
