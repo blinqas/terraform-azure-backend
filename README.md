@@ -7,6 +7,10 @@ Diagram
 -------
 ![Diagram of topology](./documentation/diagram.png "Diagram of topology")
 
+Known Issues
+------------
+* When `storage_account_blob_container_sas_start_time` is not set, a new SAS is generated on all runs without revoking old SAS. They will be valid until `storage_account_blob_container_sas_duration` or `storage_account_blob_container_sas_end_time` is met. This is because `storage_account_blob_container_sas_start_time` is equal to `timestamp()` if not explicitly set.
+
 TODO
 ----
 * Re-organize meta stuff like examples
