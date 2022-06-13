@@ -1,3 +1,0 @@
-# If using PowerShell as your terminal; edit and paste the following in your terminal to authenticate to AzDo
-$env:AZDO_ORG_SERVICE_URL="https://dev.azure.com/<Your Org Name>"
-$env:AZDO_PERSONAL_ACCESS_TOKEN="<Personal Access Token>"
