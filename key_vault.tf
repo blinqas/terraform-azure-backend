@@ -1,4 +1,3 @@
-# The Key Vault where we will store all secrets that are outputs from this module
 resource "azurerm_key_vault" "backend" {
   for_each                   = toset(var.environments)
   name                       = format("%s-%s-%s", "kv-tf", random_string.backend_id.result, each.key)
