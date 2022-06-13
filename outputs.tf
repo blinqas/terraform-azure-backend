@@ -3,10 +3,8 @@ output "environment_resource_group" {
   description = "The resource group names of each environment"
 }
 
-# Should produce:
-# { "dev" = { "name" = "x", "id" = "y" } }
 output "key_vaults" {
-  value = azurerm_key_vault.backend[*]
+  value = azurerm_key_vault.backend
 }
 
 output "backend_id" {
