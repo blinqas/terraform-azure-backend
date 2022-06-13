@@ -1,7 +1,7 @@
 Terraform Backend module for Azure by blinQ
 ===========
 
-A Terraform module to provision common backend infrastructure in Azure for new Terraform projects.
+A Terraform module to provision common backend infrastructure in Azure for new Terraform projects. This module is not meant to be used by enterprises, this is a super slim module that is meant to be used to get quickly up and running. 
 
 Diagram
 -------
