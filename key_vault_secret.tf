@@ -13,7 +13,7 @@ resource "azurerm_key_vault_secret" "client_id" {
   for_each     = toset(var.environments)
   key_vault_id = azurerm_key_vault.backend[each.key].id
   name         = "kv-arm-client-id"
-  value        = module.service-principal[each.key].service_principal.id
+  value        = module.service-principal[each.key].application.application_id
   tags = {
     environment = each.key
   }
