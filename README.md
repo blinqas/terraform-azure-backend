@@ -5,7 +5,7 @@ A Terraform module to provision common backend infrastructure in Azure for new T
 
 Diagram
 -------
-![Diagram of topology](./documentation/diagram.png "Diagram of topology")
+TODO
 
 Known Issues
 ------------
