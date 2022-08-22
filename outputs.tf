@@ -3,7 +3,7 @@ output "environment_resource_group" {
   description = "The resource group names of each environment"
 }
 
-output "key_vaults" {
+output "key_vault" {
   value = azurerm_key_vault.backend
 }
 
