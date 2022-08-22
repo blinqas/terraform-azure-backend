@@ -5,7 +5,7 @@ variable "backend_resource_group_name" {
 
 variable "environments" {
   type        = list(string)
-  description = "List of environment names. Example: ['dev', 'stage', 'test', 'prod']"
+  description = "List of environment names. Example: ['dev', 'stage', 'test', 'prod']. If these environments are separated by subscriptions, please supply only one environment per run or CI/CD."
 }
 
 variable "project_name" {
