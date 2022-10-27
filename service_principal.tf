@@ -1,5 +1,5 @@
 module "service-principal" {
-  source                         = "github.com/blinqas/terraform-azure-service-principal?ref=36b61f2"
+  source                         = "git::https://github.com/blinqas/terraform-azure-service-principal.git?ref=4.0.0-beta1"
   for_each                       = toset(var.environments)
   app_display_name               = format("%s%s%s", "sp-tf-", "${var.project_name}-", each.key)
   identifier_uri_verified_domain = var.identifier_uri_verified_domain
